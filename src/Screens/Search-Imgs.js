@@ -1,0 +1,183 @@
+
+import React, {useRef,useState,useEffect} from 'react';
+import {
+    View,
+    StyleSheet,
+    Animated,
+    PanResponder,
+    Button,
+    Text,
+    ScrollView,
+    TextInput,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Image,
+    Alert,
+    ActivityIndicator
+} from 'react-native';
+import SelectDropdown from 'react-native-select-dropdown';
+import { FlatList } from 'react-native-gesture-handler';
+
+
+
+
+export  function SearchImgs({route,navigation}){
+    const [Imagen,setImagen]=useState("");
+    const [anim,setAnim]=useState(false);
+    const [refresh,setRefresh]=useState(1);
+    const categorias=['Sin Filtro',"Croquis encuesta 1",'Foto familia delante de la casa','Baño actual-Inodoro','Baño actual-Pozo/balde',
+                        'Contrato de asignación firmado','Ficha inspección de pozos','Módulo Sanitario por dentro','Familia dentro del MS terminado',
+                        'Niños/as y adultos cepillándose los dientes/lavándose las manos dentro del MS','- Foto carta de donación del MS','Foto carta cesión de imagen'];
+    const [selectedCat,setSelectedCat]=useState("")
+    async function eliminar(nombreImg){
+      fetch('http://192.168.0.216:3000/delete',{
+        method:'POST',
+        headers:{
+            Accept:'application/JSON',
+            'Content-Type':'application/JSON',
+        },
+    body:JSON.stringify({
+      file:nombreImg,
+      UserID:route.params.id
+       })
+    }).then(response=>response.text())
+    .then(response => {console.log(response);
+    actualizar();Alert.alert("Foto borrada con exito")})
+      .catch(e=>console.log(e));
+    }
+    useEffect(() => {
+      setAnim(true);
+      actualizar();
+      
+    },[]);
+    function actualizar(){
+      fetch("http://192.168.0.216:3000/Foto/"+route.params.id,{method:"GET"}).then(response => response.json())
+      .then(response=>{setImagen(response);setAnim(false)})
+      
+    }
+    async function filtrar(){
+      let data = await fetch("http://192.168.0.216:3000/Foto/"+route.params.id,{method:"GET"}).then(response => response.json())
+      .then(response=>{if(selectedCat != 'Sin Filtro'){response = response.filter((foto)=>{return foto.fotocategoria==selectedCat?true:false})};setImagen(response);setAnim(false)})
+    }
+
+
+   
+
+    return(
+        <View style={styles.container}>
+  
+            <SelectDropdown
+                    data={categorias}
+                    onSelect={(selectedItem, index) => {
+                        setSelectedCat(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item
+                    }}
+                    defaultButtonText={"Filtrar Por:"}
+                    buttonStyle={{width:300,borderRadius:20,backgroundColor:'#005f73',top:'150%'}} 
+                    buttonTextStyle={{color:'white'}}
+                />
+              <View style={styles.sumbitContainer}>
+                <TouchableOpacity style={styles.sumbit} disabled={selectedCat==""?true:false} onPress={()=>{setAnim(true);filtrar();}} >
+                    <Text style={styles.sumbitText}>Buscar</Text>
+                </TouchableOpacity>
+              </View>
+
+            <FlatList data={Imagen}  style={styles.flatList} renderItem={({ item }) => (
+                        <View style={{alignContent:'center',padding:20, }}>
+                        <Image source={{uri:"http://192.168.0.216:3000/download/"+item.foto}} style={{width:120,height:110,alignSelf:'center'}}/>
+                        <Text style={{padding:10,fontSize:16,alignSelf:'center'}}>Categoria:{item.fotocategoria}</Text>
+                          
+                      <TouchableOpacity onPress={()=>{eliminar(item.foto);setRefresh(refresh+1)}} style={styles.delete} >
+                          <Image source={require("../imgs/delete.png")} style={{height:35,
+        width:30}}/>
+                      </TouchableOpacity>
+                         <TouchableOpacity style={styles.map} onPress={() => {navigation.navigate('MapScreen')}}>
+                           <Image source={require("../imgs/mapa.png")} style={{height:35,
+        width:30}} />
+                       </TouchableOpacity>
+                       </View>
+                      
+
+                    )}/>
+        </View>
+
+    );
+  }
+const styles=StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#e0fbfc',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      },
+
+      Caja:{
+        width:150,
+        //backgroundColor:"#0096c7",
+        height:150,
+        bottom:"20%",
+        left:"0%",
+        alignSelf:'center'
+
+      },
+      flatList:{
+        flexGrow:0,
+        height:'50%',
+        width:'100%'
+
+
+      },
+      delete:{
+        height:30,
+        width:30,
+        left:120,
+        //top:161,
+        //padding:10
+      },
+      map:{
+        position:'absolute',
+        height:35,
+        width:30,
+        top:-32,
+        top:171,
+        left:220
+
+      },
+      img:{
+        //top:10
+      },
+      sumbitContainer:{
+        top:'40%',
+        borderRadius:25
+        
+
+
+      },
+      sumbit:{
+        alignItems:"center",
+        justifyContent:"center",
+        alignContent:'center',
+        textAlign:'center',
+        borderRadius:25,
+
+      },
+      sumbitText:{
+        width:150,
+        backgroundColor:"#0096c7",
+        borderRadius:25,
+        height:50,
+        color:'white',
+        alignItems:"center",
+        justifyContent:"center",
+        textAlign:'center',
+        textAlignVertical:'center',
+        top:300,
+        fontSize:17
+      },
+      
+})
