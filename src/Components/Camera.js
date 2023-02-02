@@ -14,7 +14,6 @@ import * as ImagePicker from 'expo-image-picker';
 export function Camera (props){
     const [image, setImage] = useState(null);
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -23,33 +22,57 @@ export function Camera (props){
         });
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            console.log(image);
             props.selectedImage(image);
           };
-
+          
         };
+        const openCamera = async () => {
+            // Ask the user for the permission to access the camera
+            const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
         
+            if (permissionResult.granted === false) {
+              alert("You've refused to allow this appp to access your camera!");
+              return;
+            }
+        
+            const result = await ImagePicker.launchCameraAsync();
+
+            if (!result.canceled) {
+                setImage(result.assets[0].uri);
+                props.selectedImage(image);
+            }
+        }
+              
+            
+    useEffect(()=> {
+        props.selectedImage(image);
+    },[image])
+        
+
 
     return(
     <View style={{alignItems: 'center', justifyContent: 'center', alignSelf:'center', top:'30%' }}>
+        <View style={{top:'120%',right:'-22%'}}>
+        <TouchableOpacity style={{position:'absolute',top:'120%',right:'5%'}} onPress={()=>{pickImage();}}>
+            <Image source={require('../imgs/gallery.png')} title="Pick an image from camera roll"  style={{resizeMode:'contain',width:40,height:40}} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{position:'absolute',top:'120%',right:'30%'}} onPress={()=>{openCamera();}}>
+            <Image source={require('../imgs/camera.png')} title="Pick an image from camera roll"  style={{resizeMode:'contain',width:40,height:40}} />
+        </TouchableOpacity>
+        </View>
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-      
+        
     </View>
     )
 
-}
+};
 
 const styles=StyleSheet.create({
     containerBimg:{
         justifyContent:"center",
         alignItems:'center',
-        //paddingLeft:250,
-        //paddingTop:500,
         backgroundColor:'#e0fbfc',
         alignSelf:'flex-end',
-        //marginTop:500,
-        //marginRight:50
     },
     ButtonImg:{
         alignSelf:'center',
@@ -65,15 +88,10 @@ const styles=StyleSheet.create({
     img:{
         width:40,
         height:40,
-        //borderRadius:15,
     },
     img2:{
-        //flex:1,
         width:300,
         height:300,
-        //alignSelf:'center',
-        //justifyContent:'center',
-        //alignItems:'center',
         resizeMode:"contain",
     },
     img2Cont:{
@@ -81,8 +99,10 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         bottom:450,
-        //left:"50%"
 
+    },
+    gallery:{
+        //height:10,
     }
 });
 

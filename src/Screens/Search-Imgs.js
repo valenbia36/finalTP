@@ -65,7 +65,6 @@ export  function SearchImgs({route,navigation}){
 
     return(
         <View style={styles.container}>
-  
             <SelectDropdown
                     data={categorias}
                     onSelect={(selectedItem, index) => {
@@ -77,10 +76,11 @@ export  function SearchImgs({route,navigation}){
                     rowTextForSelection={(item, index) => {
                         return item
                     }}
-                    defaultButtonText={"Filtrar Por:"}
+                    defaultButtonText={"Filtrar"}
                     buttonStyle={{width:300,borderRadius:20,backgroundColor:'#005f73',top:'150%'}} 
                     buttonTextStyle={{color:'white'}}
                 />
+              <Image source = {require('../imgs/up_arrow.png')} style={{width:20, height:20,top:'71%',right:'20%',position:'absolute'}}/>
               <View style={styles.sumbitContainer}>
                 <TouchableOpacity style={styles.sumbit} disabled={selectedCat==""?true:false} onPress={()=>{setAnim(true);filtrar();}} >
                     <Text style={styles.sumbitText}>Buscar</Text>
@@ -153,30 +153,25 @@ const styles=StyleSheet.create({
       },
       sumbitContainer:{
         top:'40%',
-        borderRadius:25
+        borderRadius:25,
+        textAlignVertical:'center'
         
 
 
       },
       sumbit:{
-        alignItems:"center",
-        justifyContent:"center",
-        alignContent:'center',
-        textAlign:'center',
+        backgroundColor:"#0096c7",
         borderRadius:25,
+        top:300,
 
       },
       sumbitText:{
         width:150,
-        backgroundColor:"#0096c7",
-        borderRadius:25,
         height:50,
         color:'white',
-        alignItems:"center",
-        justifyContent:"center",
         textAlign:'center',
         textAlignVertical:'center',
-        top:300,
+        top:"25%",
         fontSize:17
       },
       

@@ -10,19 +10,15 @@ export const styles=StyleSheet.create({
         backgroundColor:'#e0fbfc',
     },
     containermisF:{
-        //flex:1,
-        //width:150,
         alignItems:'center',
         alignSelf:"center",
         justifyContent:'center',
         alignContent:'center',
-        //top:300,
         flexDirection:'row',
 
         
     },
     misF:{
-        //flex:1,
         borderRadius:25,
         backgroundColor:"#48cae4",
         width:150,
@@ -32,11 +28,10 @@ export const styles=StyleSheet.create({
         justifyContent:'center',
         alignSelf:'center',
         top:"80%",
-        //right:5,
     },
     title:{
         alignSelf:'center',
-        top:50,
+        top:80,
         fontSize:20,
         fontWeight:'900'
     },
@@ -45,7 +40,6 @@ export const styles=StyleSheet.create({
         alignSelf:'center'
     },
     buscar:{
-        //flex:1,
         borderRadius:25,
         backgroundColor:"#48cae4",
         width:180,

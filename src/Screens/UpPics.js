@@ -1,17 +1,19 @@
-import React, {useRef,useState} from 'react';
+import React, {useRef,useState,useEffect} from 'react';
 import {
     View,
     StyleSheet,
     Text,
     TouchableOpacity,
-    Picker,Image, Alert, ActivityIndicator
+    Image,
+    Alert
 } from 'react-native';
 import {Camera} from '../Components/Camera';
 import SelectDropdown from 'react-native-select-dropdown';
 
 
+
+
 export function UpPics({route,navigation}) {
-    //console.log(route.params)
     const [imagen,setImage]=useState();
     const categorias=["Croquis encuesta 1",'Foto familia delante de la casa','Baño actual-Inodoro','Baño actual-Pozo/balde',
                         'Contrato de asignación firmado','Ficha inspección de pozos','Módulo Sanitario por dentro','Familia dentro del MS terminado',
@@ -28,7 +30,7 @@ export function UpPics({route,navigation}) {
              body:JSON.stringify({
                  id:route.params.id,
                  name:route.params.ape,
-                 ubicacion:"Bs as",
+                 ubicacion:route.params.ubicacion,
              })
          })
          .then(response=>response.json())
@@ -49,6 +51,8 @@ export function UpPics({route,navigation}) {
          
 
         }
+        useEffect(()=> {
+        },[imagen])
     return (
         <View style={styles.container}>
         <Camera selectedImage={setImage.bind(this)}></Camera>
@@ -69,7 +73,7 @@ export function UpPics({route,navigation}) {
                     buttonTextStyle={{color:'white'}}
                 />
                 <TouchableOpacity>
-                    <Image source={require("../imgs/down_arrow.png")} style={styles.downImg}></Image>
+                    <Image source={require("../imgs/up_arrow.png")} style={styles.downImg}></Image>
                 </TouchableOpacity>
             </View>
             {imagen  && selectedCat && (<View style={styles.upCont}>
@@ -91,7 +95,7 @@ const styles=StyleSheet.create({
         alignContent:'center',
         justifyContent:'center',
         alignSelf:'center',
-        top:510,
+        top:"70%",
     },
     upCont:{
         position:'absolute',
@@ -99,7 +103,7 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignSelf:'center',
         backgroundColor:'#005f73',
-        top:'70%',
+        top:'80%',
         width:200,
         borderRadius:20,
 
