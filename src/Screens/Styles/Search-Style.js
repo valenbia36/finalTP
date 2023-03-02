@@ -1,7 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
-import React, {useRef, version,} from 'react';
 import {
-    StyleSheet,Dimensions
+    StyleSheet
 } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -10,17 +8,14 @@ export const styles = StyleSheet.create({
         backgroundColor: '#e0fbfc',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        //flexGrow:1,
         resizeMode:'contain',
         height:200
       },
     inputView:{
-        //position:'absolute',
         width:"80%",
         backgroundColor:"#90e0ef",
         borderRadius:25,
         height:50,
-        //marginBottom:20,
         justifyContent:"center",
         padding:20,
         top:"20%"
@@ -46,26 +41,14 @@ export const styles = StyleSheet.create({
         textAlignVertical:'center',
       },
       sumbit:{
-        //width:'100%',
-        //height:'100%',
 
       },
       sumbitText:{
-        //width:150,
-        //backgroundColor:"#0096c7",
-        //borderRadius:25,
-        //height:50,
         color:'white',
-        //alignItems:"center",
-        //justifyContent:"center",
-        //textAlign:'center',
-        //textAlignVertical:'center',
-        //top:300,
         fontSize:17,
         right:10
       },
       pickerCont:{
-        //position:'absolute',
         alignContent:'center',
         justifyContent:'center',
         alignSelf:'center',

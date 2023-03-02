@@ -2,10 +2,6 @@ import React, {useRef,useState, useEffect} from 'react';
 import {
     View,
     StyleSheet,
-    Animated,
-    PanResponder,
-    Button,
-    Text,
     Image,
     TouchableOpacity
 } from 'react-native';
@@ -27,16 +23,12 @@ export function Camera (props){
           
         };
         const openCamera = async () => {
-            // Ask the user for the permission to access the camera
             const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-        
             if (permissionResult.granted === false) {
               alert("You've refused to allow this appp to access your camera!");
               return;
             }
-        
             const result = await ImagePicker.launchCameraAsync();
-
             if (!result.canceled) {
                 setImage(result.assets[0].uri);
                 props.selectedImage(image);

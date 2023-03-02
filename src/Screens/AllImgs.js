@@ -1,4 +1,3 @@
-
 import React, {useState,useEffect} from 'react';
 import {
     View,
@@ -15,7 +14,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 
-export  function SearchImgs({route,navigation}){
+export function AllImgs({route,navigation}){
     const [Imagen,setImagen]=useState("");
     const [anim,setAnim]=useState(false);
     const [refresh,setRefresh]=useState(1);
@@ -23,34 +22,19 @@ export  function SearchImgs({route,navigation}){
                         'Contrato de asignación firmado','Ficha inspección de pozos','Módulo Sanitario por dentro','Familia dentro del MS terminado',
                         'Niños/as y adultos cepillándose los dientes/lavándose las manos dentro del MS','- Foto carta de donación del MS','Foto carta cesión de imagen'];
     const [selectedCat,setSelectedCat]=useState("");
-    async function eliminar(nombreImg){
-      fetch('http://192.168.0.216:3000/delete',{
-        method:'POST',
-        headers:{
-            Accept:'application/JSON',
-            'Content-Type':'application/JSON',
-        },
-    body:JSON.stringify({
-      file:nombreImg,
-      UserID:route.params.id
-       })
-    }).then(response=>response.text())
-    .then(response => {console.log(response);
-    actualizar();Alert.alert("Foto borrada con exito")})
-      .catch(e=>console.log(e));
-    }
+
     useEffect(() => {
       setAnim(true);
       actualizar();
       
     },[]);
     function actualizar(){
-      fetch("http://172.29.211.141:3000/Foto/"+route.params.id,{method:"GET"}).then(response => response.json())
+      fetch("http://172.29.211.141:3000/Fotos/",{method:"GET"}).then(response => response.json())
       .then(response=>{setImagen(response);setAnim(false)})
       
     }
     async function filtrar(){
-      let data = await fetch("http://172.29.211.141:3000/Foto/"+route.params.id,{method:"GET"}).then(response => response.json())
+      let data = await fetch("http://172.29.211.141:3000/Fotos/",{method:"GET"}).then(response => response.json())
       .then(response=>{if(selectedCat != 'Sin Filtro'){response = response.filter((foto)=>{return foto.fotocategoria==selectedCat?true:false})};setImagen(response);setAnim(false)})
     }
 

@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import {styles} from './Styles/Search-Style';
 import SelectDropdown from 'react-native-select-dropdown';
-//import {useDispatch,useSelector} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
+import {setCriterioFilter} from '../redux/Reducers';
+
 
 
 export  function Search({route,navigation}){
     const [text, onChangeText]=useState("");
-    const criterio=["Apellido","Barrio","Partido","Provincia"]
-    //const {criterioFilter} = useSelector(state => state.application);
-    const [criterioElegido,setCriterio]=useState("");
+    const dispatch = useDispatch();
+    const {criterio,criterioOptions} = useSelector(state => state.application);
     const [anim,setAnim]=useState(false);
 
     return(
@@ -29,9 +30,9 @@ export  function Search({route,navigation}){
             </View>
             <View style={styles.pickerCont}>
             <SelectDropdown
-                data={criterio}
+                data={criterioOptions}
                 onSelect={(selectedItem, index) => {
-                    setCriterio(selectedItem);
+                    dispatch(setCriterioFilter(selectedItem))
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem
@@ -48,7 +49,7 @@ export  function Search({route,navigation}){
         <ActivityIndicator animating={anim} style={{top:400}} size={'large'} />
 
             <View style={styles.sumbitContainer}>
-            <TouchableOpacity style={styles.submit} disabled={criterioElegido==""?true:false} onPress={()=>{setAnim(true);navigation.navigate('Families',{criterio:criterioElegido,text:text})}} >
+            <TouchableOpacity style={styles.submit} disabled={criterio==""?true:false} onPress={()=>{setAnim(true);navigation.navigate('Families',{criterio:criterio,text:text})}} >
                     <Text style={styles.sumbitText}>Buscar</Text>
                     <Image source = {require('../imgs/search.png')} style={{width:20, height:20, position:'absolute', right:-30}} />
                 </TouchableOpacity>

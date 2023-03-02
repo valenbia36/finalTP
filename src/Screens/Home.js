@@ -1,21 +1,18 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, {useRef, version,useEffect,useState} from 'react';
+import React, {useRef,useEffect} from 'react';
 
 import {
     View,
-    StyleSheet,
     Animated,
-    PanResponder,
-    Button,
     Text,
     Image,
-    TouchableOpacity, Alert
+    TouchableOpacity,
 } from 'react-native';
 import {styles} from './Styles/Home-Style';
 
 
 export function Home({route,navigation}) {
-    const fadeAnim = useRef(new Animated.Value(0)).current
+    const fadeAnim = useRef(new Animated.Value(0)).current;
     useEffect(()=>{
         Animated.timing(fadeAnim,{
             toValue:1,
@@ -23,7 +20,17 @@ export function Home({route,navigation}) {
             useNativeDriver:true
         }).start();
     },[fadeAnim])
+    const pan = useRef(new Animated.ValueXY()).current;
 
+  /*const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}]),
+      onPanResponderRelease: () => {
+        pan.extractOffset();
+      },
+    }),
+  ).current;*/
 
 
     return (
@@ -33,13 +40,23 @@ export function Home({route,navigation}) {
                 <Text style={styles.title}>Bienvenido Usuario</Text>
             </Animated.View>
             <View style={styles.containermisF}>
-                {/*<TouchableOpacity title="Mis Fotos" onPress={()=>navigation.navigate("myPics")} style={styles.misF}>
-                    <Text style={{fontWeight:'900',fontSize:14,}}>Subir o tomar foto</Text>
-    </TouchableOpacity>*/}
                 <TouchableOpacity title="Buscar Familias" style={styles.buscar} onPress={()=>navigation.navigate("Search")} >
                     <Text style={{fontWeight:'bold',fontSize:15,}}>Buscar Familias</Text>
                 </TouchableOpacity>
             </View>
+            {/*
+              <View style={styles.containermisF}>
+              <TouchableOpacity title="Prueba" style={styles.buscar} onPress={()=>navigation.navigate("Prueba")} >
+                  <Text style={{fontWeight:'bold',fontSize:15,}}>Prueba</Text>
+              </TouchableOpacity>
+          </View>
+            */}
+            {/*<Animated.View style={{
+          transform: [{translateX: pan.x}, {translateY: pan.y}],
+        }}
+        {...panResponder.panHandlers}>
+                <Image source={require('../imgs/information.png')} style={{top:'100%',resizeMode:'contain',height:50}}/>
+      </Animated.View>*/}
         </View>
         
     );

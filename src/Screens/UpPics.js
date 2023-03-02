@@ -1,4 +1,4 @@
-import React, {useRef,useState,useEffect} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
     View,
     StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Camera} from '../Components/Camera';
 import SelectDropdown from 'react-native-select-dropdown';
+import getLocation from '../helpers/getLocation'
 
 
 
@@ -17,11 +18,11 @@ export function UpPics({route,navigation}) {
     const [imagen,setImage]=useState();
     const categorias=["Croquis encuesta 1",'Foto familia delante de la casa','Baño actual-Inodoro','Baño actual-Pozo/balde',
                         'Contrato de asignación firmado','Ficha inspección de pozos','Módulo Sanitario por dentro','Familia dentro del MS terminado',
-                        'Niños/as y adultos cepillándose los dientes/lavándose las manos dentro del MS','- Foto carta de donación del MS','Foto carta cesión de imagen']; 
+                        'Niños/as y adultos cepillándose los dientes/lavándose las manos dentro del MS','Foto carta de donación del MS','Foto carta cesión de imagen']; 
     
-    const [selectedCat,setSelectedCat]=useState("")
+    const [selectedCat,setSelectedCat]=useState("");
     const upload = async()=>{
-        await fetch("http://192.168.0.216:3000/crearfamilia",{
+        await fetch("http://172.29.211.141:3000/crearfamilia",{
              method:'POST',
              headers:{
                  Accept:'application/JSON',
@@ -36,7 +37,7 @@ export function UpPics({route,navigation}) {
          .then(response=>response.json())
          .then(success=> {console.log(success)})
          .catch(e=>console.log(e));
-        let url="http://192.168.0.216:3000/single";
+        let url="http://172.29.211.141:3000/single";
         let data=new FormData();
         data.append('image', {uri: imagen, name: 'photo.jpg',filename :'imageTest45.jpg',type: 'image/jpeg'});
         data.append('UserID',route.params.id);
